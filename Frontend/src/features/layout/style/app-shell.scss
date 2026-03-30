@@ -1,0 +1,246 @@
+.app-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    background:
+        radial-gradient(circle at top left, rgba(47, 109, 246, 0.08), transparent 28%),
+        linear-gradient(180deg, #fbfdff 0%, #f4f7fb 100%);
+}
+
+.app-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 2rem 1.25rem;
+    border-right: 1px solid rgba(13, 27, 42, 0.08);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        h1 {
+            font-size: 1.15rem;
+            margin: 0;
+        }
+    }
+
+    &__brand-mark {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #ffffff;
+        background: linear-gradient(135deg, #2563eb 0%, #0f766e 100%);
+        box-shadow: 0 18px 30px rgba(37, 99, 235, 0.22);
+    }
+
+    &__eyebrow {
+        margin: 0 0 0.2rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #64748b;
+    }
+
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    &__link {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.9rem 1rem;
+        border-radius: 18px;
+        color: #475569;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+
+        &:hover {
+            background: #edf4ff;
+            color: #1e293b;
+        }
+
+        &--active {
+            background: linear-gradient(135deg, #eff6ff 0%, #ecfeff 100%);
+            color: #0f172a;
+            box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.12);
+        }
+    }
+
+    &__icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        display: inline-flex;
+        color: inherit;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &__profile {
+        margin-top: auto;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 1rem;
+        border-radius: 22px;
+        background: #f8fbff;
+        border: 1px solid rgba(13, 27, 42, 0.08);
+    }
+
+    &__avatar {
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #dbeafe 0%, #ccfbf1 100%);
+        color: #0f172a;
+        font-weight: 800;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__profile-copy {
+        min-width: 0;
+
+        strong,
+        span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        strong {
+            color: #0f172a;
+        }
+
+        span {
+            margin-top: 0.2rem;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+    }
+
+    &__logout {
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 0;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: #eef2ff;
+        color: #334155;
+        cursor: pointer;
+
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+}
+
+.app-shell__content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem 0;
+    background: linear-gradient(180deg, rgba(244, 247, 251, 0.95) 68%, rgba(244, 247, 251, 0));
+
+    &__menu {
+        display: none;
+        width: 2.75rem;
+        height: 2.75rem;
+        border: 1px solid rgba(13, 27, 42, 0.1);
+        border-radius: 16px;
+        background: #ffffff;
+        cursor: pointer;
+
+        svg {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+    }
+
+    &__copy {
+        p {
+            margin: 0 0 0.3rem;
+            color: #64748b;
+            font-size: 0.86rem;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #0f172a;
+        }
+    }
+}
+
+.app-shell__main {
+    padding: 1.25rem 2rem 2rem;
+}
+
+@media (max-width: 1080px) {
+    .app-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .app-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 20;
+        width: min(84vw, 320px);
+        transform: translateX(-102%);
+        transition: transform 0.25s ease;
+        box-shadow: 24px 0 50px rgba(15, 23, 42, 0.12);
+
+        &--open {
+            transform: translateX(0);
+        }
+    }
+
+    .app-topbar {
+        padding: 1rem 1rem 0;
+
+        &__menu {
+            display: grid;
+            place-items: center;
+        }
+    }
+
+    .app-shell__main {
+        padding: 1rem 1rem 1.5rem;
+    }
+}
