@@ -3,6 +3,21 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const tokenBlacklistModel = require('../models/blacklist.model');
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000,
+};
+
+function createAuthToken(user) {
+    return jwt.sign(
+        { user: user._id, username: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
+    );
+}
+
 /* 
 @name registerUserController
 @desc Register a new user, expects username, email, and password in the request body
@@ -24,20 +39,18 @@ async function registerUserController(req, res) {
             return res.status(400).json({ message: 'Account already exists with this email address or username' });
         }
  
-        const hash = await bcrypt.hash(password, 10);
+        const hash = await bcrypt.hash(password, 12);
         // Create a new user
         const user = new userModel({
             username,
             email,
-            password: hash, // In a real application, make sure to hash the password before saving
+            password: hash,
         });
 
-        const token = jwt.sign({
-            user: user._id,username:user.username}
-            , process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = createAuthToken(user);
         await user.save();
  
-        res.cookie('token', token)
+        res.cookie('token', token, cookieOptions);
         res.status(201).json({ 
             message: 'User registered successfully',
             user: {
@@ -80,10 +93,10 @@ async function loginUserController(req, res) {
         }
 
         // Generate a JWT token
-        const token = jwt.sign({ user: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = createAuthToken(user);
 
         // Set the token as a cookie
-        res.cookie('token', token);
+        res.cookie('token', token, cookieOptions);
 
         res.status(200).json({
             message: 'User logged in successfully',
@@ -120,7 +133,7 @@ async function logoutUserController(req, res) {
         }
 
         // Clear the token cookie
-        res.clearCookie('token');
+        res.clearCookie('token', cookieOptions);
 
         res.status(200).json({ message: 'User logged out successfully' });
     } catch (error) {
